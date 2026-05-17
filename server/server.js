@@ -51,9 +51,16 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/auth', authRoutes);
+
 app.use('/api/tasks', taskRoutes);
+app.use('/tasks', taskRoutes);
+
 app.use('/api/submissions', submissionRoutes);
+app.use('/submissions', submissionRoutes);
+
 app.use('/api/feedbacks', feedbackRoutes);
+app.use('/feedbacks', feedbackRoutes);
 
 
 // ==========================
