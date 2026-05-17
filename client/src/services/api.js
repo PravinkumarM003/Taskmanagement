@@ -1,7 +1,7 @@
 // API service for all HTTP requests
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 // Create axios instance
 const apiClient = axios.create({
@@ -22,7 +22,19 @@ apiClient.interceptors.request.use((config) => {
 
 // Handle response errors
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Check for version mismatch
+    const serverVersion = response.headers['x-app-version'];
+    if (serverVersion) {
+      const currentVersion = localStorage.getItem('app_version');
+      if (currentVersion && currentVersion !== serverVersion) {
+        console.warn('Version mismatch detected! Client might be out of sync.');
+        // Optional: window.location.reload(); 
+      }
+      localStorage.setItem('app_version', serverVersion);
+    }
+    return response;
+  },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');

@@ -1,5 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
 
 async function initDB() {
   try {
@@ -10,10 +12,18 @@ async function initDB() {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME || 'test',
       port: process.env.DB_PORT || 4000,
-      ssl: {
-        minVersion: 'TLSv1.2',
-        rejectUnauthorized: true
-      }
+      ssl: (() => {
+        const certPath = path.join(__dirname, 'models', 'isrgrootx1.pem');
+        const hasCert = fs.existsSync(certPath);
+        if (!hasCert) {
+          console.warn('⚠️ Warning: isrgrootx1.pem certificate not found at ' + certPath + '. Connecting without specific CA certificate.');
+        }
+        return {
+          minVersion: 'TLSv1.2',
+          ca: hasCert ? fs.readFileSync(certPath) : undefined,
+          rejectUnauthorized: true
+        };
+      })()
     });
 
     console.log('Connected! Creating users table...');

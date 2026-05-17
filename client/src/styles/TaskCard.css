@@ -60,9 +60,10 @@
   font-size: 12px;
 }
 
+
 .submit-btn {
-  background: var(--bg-primary);
-  color: white;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   margin-left: 10px;
   padding: 8px 16px;
   border-radius: 4px;

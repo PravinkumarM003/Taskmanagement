@@ -38,9 +38,6 @@
   font-size: 32px;
   color: var(--title-color);
   margin: 0 0 10px 0;
-  background: var(--bg-primary);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 }
 
 .auth-header p {
@@ -93,8 +90,8 @@
 .submit-btn {
   width: 100%;
   padding: 12px;
-  background: var(--bg-primary);
-  color: white;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   border: none;
   border-radius: 6px;
   font-weight: 600;
@@ -170,7 +167,7 @@
 .auth-divider span {
   font-size: 13px;
   font-weight: 600;
-  color: #999;
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
 }

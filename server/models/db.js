@@ -1,5 +1,7 @@
 // Database connection configuration
 const mysql = require('mysql2/promise');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config();
 
 // Create connection pool
@@ -12,10 +14,18 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: process.env.DB_SSL === 'true' ? {
-    minVersion: 'TLSv1.2',
-    rejectUnauthorized: true
-  } : undefined
+  ssl: process.env.DB_SSL === 'true' ? (() => {
+    const certPath = path.join(__dirname, 'isrgrootx1.pem');
+    const hasCert = fs.existsSync(certPath);
+    if (!hasCert) {
+      console.warn('⚠️ Warning: isrgrootx1.pem certificate not found at ' + certPath + '. Connecting without specific CA certificate.');
+    }
+    return {
+      minVersion: 'TLSv1.2',
+      ca: hasCert ? fs.readFileSync(certPath) : undefined,
+      rejectUnauthorized: true
+    };
+  })() : undefined
 });
 
 module.exports = pool;

@@ -48,6 +48,7 @@ Thumbs.db
 # Misc
 .cache/
 *.pem
+!server/models/isrgrootx1.pem
 
 # Database backups
 *.sql.bak
@@ -55,3 +56,8 @@ Thumbs.db
 
 # Production
 dist/
+
+# Security
+ed25519
+ed25519 .pub
+.env*

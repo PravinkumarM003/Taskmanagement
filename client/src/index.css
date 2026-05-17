@@ -1,34 +1,39 @@
 :root {
-  --bg-primary: #f0f9ff;
-  --bg-secondary: #e0f2fe;
-  --text-primary: #0369a1;
-  --text-secondary: #0ea5e9;
-  --card-bg: #e0f2fe;
-  --nav-bg: #e0f2fe;
-  --border-color: #bae6fd;
-  --input-bg: #f0f9ff;
-  --modal-bg: #e0f2fe;
-  --shadow-color: rgba(0, 0, 0, 0.05);
-  --title-color: #0c4a6e;
-  --accent-color: #0ea5e9;
-  --nav-text: #0369a1;
-  --tab-active-text: #000000;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --card-bg: #ffffff;
+  --nav-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --input-bg: #ffffff;
+  --modal-bg: #ffffff;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --title-color: #0f172a;
+  --accent-color: #3b82f6;
+  --nav-text: #1e293b;
+  --tab-active-text: #3b82f6;
+  --btn-bg: #3b82f6;
+  --btn-text: #ffffff;
 }
 
 [data-theme='dark'] {
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
   --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
+  --text-secondary: #cbd5e1;
   --card-bg: #1e293b;
-  --nav-bg: rgba(15, 23, 42, 0.9);
+  --nav-bg: #1e293b;
   --border-color: #334155;
   --input-bg: #0f172a;
   --modal-bg: #1e293b;
   --shadow-color: rgba(0, 0, 0, 0.4);
   --title-color: #ffffff;
   --accent-color: #60a5fa;
-  --tab-active-text: #ffffff;
+  --nav-text: #f1f5f9;
+  --tab-active-text: #60a5fa;
+  --btn-bg: #3b82f6;
+  --btn-text: #ffffff;
 }
 
 * {
@@ -91,7 +96,7 @@ a {
   justify-content: center;
   min-height: 100vh;
   font-size: 24px;
-  color: white;
+  color: var(--text-primary);
 }
 
 .error-alert {
