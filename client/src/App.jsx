@@ -10,22 +10,20 @@ import StudentDashboard from "./pages/StudentDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
-// Auth wrapper
-function requireAuth(Component, role) {
-  return () => {
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-    const token = localStorage.getItem("token");
+// Auth wrapper component
+function RequireAuth({ children, role }) {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const token = localStorage.getItem("token");
 
-    if (!token || !user) {
-      return <Navigate to="/login" replace />;
-    }
+  if (!token || !user) {
+    return <Navigate to="/login" replace />;
+  }
 
-    if (role && user.role !== role) {
-      return <Navigate to="/login" replace />;
-    }
+  if (role && user.role !== role) {
+    return <Navigate to="/login" replace />;
+  }
 
-    return <Component />;
-  };
+  return children;
 }
 
 const router = createBrowserRouter(
@@ -35,11 +33,19 @@ const router = createBrowserRouter(
 
     {
       path: "/student-dashboard",
-      element: requireAuth(StudentDashboard, "student")(),
+      element: (
+        <RequireAuth role="student">
+          <StudentDashboard />
+        </RequireAuth>
+      ),
     },
     {
       path: "/admin-dashboard",
-      element: requireAuth(AdminDashboard, "admin")(),
+      element: (
+        <RequireAuth role="admin">
+          <AdminDashboard />
+        </RequireAuth>
+      ),
     },
 
     { path: "/", element: <Navigate to="/login" replace /> },
