@@ -20,7 +20,8 @@
 .not-found-content h1 {
   font-size: 80px;
   margin: 0;
-  color: var(--accent-color);
+  background: var(--bg-primary);
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
 }
 
@@ -39,7 +40,7 @@
 .back-link {
   display: inline-block;
   background: var(--btn-bg);
-  color: var(--btn-text);
+  color: var(--btn-text );
   padding: 12px 30px;
   border-radius: 6px;
   font-weight: 600;

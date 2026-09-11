@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const pool = require('../models/db');
 
+if (!process.env.JWT_SECRET) {
+  console.error("FATAL ERROR: JWT_SECRET is not defined in environment variables.");
+  process.exit(1);
+}
+
 // Google OAuth client
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -107,7 +112,7 @@ const login = async (req, res) => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role, name: user.name },
-        process.env.JWT_SECRET || 'your_jwt_secret_key',
+        process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
 
@@ -206,7 +211,7 @@ const googleLogin = async (req, res) => {
       // Generate JWT token
       const token = jwt.sign(
         { id: user.id, email: user.email, role: user.role, name: user.name, profilePicture: user.profile_picture },
-        process.env.JWT_SECRET || 'your_jwt_secret_key',
+        process.env.JWT_SECRET,
         { expiresIn: '7d' }
       );
 

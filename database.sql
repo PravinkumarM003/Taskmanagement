@@ -15,13 +15,39 @@ CREATE TABLE users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Create tasks table
+-- Create tasks table (Keeping for backward compatibility if needed)
 CREATE TABLE tasks (
   id INT PRIMARY KEY AUTO_INCREMENT,
   title VARCHAR(200) NOT NULL,
   description LONGTEXT NOT NULL,
+  type VARCHAR(50) DEFAULT 'general',
+  options JSON DEFAULT NULL,
+  correct_answer JSON DEFAULT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create tests table
+CREATE TABLE tests (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  title VARCHAR(200) NOT NULL,
+  description LONGTEXT,
+  duration_minutes INT DEFAULT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Create questions table (belonging to tests)
+CREATE TABLE questions (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  test_id INT NOT NULL,
+  type VARCHAR(50) NOT NULL DEFAULT 'general',
+  question_text LONGTEXT NOT NULL,
+  options JSON DEFAULT NULL,
+  correct_answer JSON DEFAULT NULL,
+  max_marks INT DEFAULT 10,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (test_id) REFERENCES tests(id) ON DELETE CASCADE
 );
 
 -- Create submissions table
@@ -39,12 +65,40 @@ CREATE TABLE submissions (
   UNIQUE KEY unique_submission (task_id, student_id)
 );
 
+-- Create test_submissions table
+CREATE TABLE test_submissions (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  test_id INT NOT NULL,
+  student_id INT NOT NULL,
+  total_score INT DEFAULT NULL,
+  status VARCHAR(20) DEFAULT 'pending',
+  feedback_summary LONGTEXT DEFAULT NULL,
+  submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (test_id) REFERENCES tests(id) ON DELETE CASCADE,
+  FOREIGN KEY (student_id) REFERENCES users(id) ON DELETE CASCADE,
+  UNIQUE KEY unique_test_submission (test_id, student_id)
+);
+
+-- Create question_answers table (individual answers for a test submission)
+CREATE TABLE question_answers (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  submission_id INT NOT NULL,
+  question_id INT NOT NULL,
+  student_answer LONGTEXT NOT NULL,
+  marks_awarded INT DEFAULT NULL,
+  admin_feedback LONGTEXT DEFAULT NULL,
+  FOREIGN KEY (submission_id) REFERENCES test_submissions(id) ON DELETE CASCADE,
+  FOREIGN KEY (question_id) REFERENCES questions(id) ON DELETE CASCADE
+);
+
 -- Create indexes for better query performance
 CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
 CREATE INDEX idx_submissions_student ON submissions(student_id);
 CREATE INDEX idx_submissions_task ON submissions(task_id);
-CREATE INDEX idx_submissions_marks ON submissions(marks);
+CREATE INDEX idx_test_submissions_student ON test_submissions(student_id);
+CREATE INDEX idx_test_submissions_test ON test_submissions(test_id);
 
 -- Insert demo admin user (password: admin123 hashed with bcryptjs)
 -- For actual implementation, hash the password using bcryptjs

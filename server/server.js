@@ -8,6 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const taskRoutes = require('./routes/taskRoutes');
 const submissionRoutes = require('./routes/submissionRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const testRoutes = require('./routes/testRoutes');
 
 const app = express();
 const pkg = require('./package.json');
@@ -61,6 +62,9 @@ app.use('/submissions', submissionRoutes);
 
 app.use('/api/feedbacks', feedbackRoutes);
 app.use('/feedbacks', feedbackRoutes);
+
+app.use('/api/tests', testRoutes);
+app.use('/tests', testRoutes);
 
 
 // ==========================

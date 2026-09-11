@@ -39,10 +39,20 @@ const submitTask = async (req, res) => {
       // Auto-grade MCQ
       if (task.type === 'mcq') {
         try {
-          const correctAnswers = typeof task.correct_answer === 'string' ? JSON.parse(task.correct_answer) : task.correct_answer;
-          const studentAnswers = typeof answer === 'string' ? JSON.parse(answer) : answer;
+          let correctAnswers = task.correct_answer;
+          let studentAnswers = answer;
           
-          if (Array.isArray(correctAnswers) && Array.isArray(studentAnswers)) {
+          try { correctAnswers = JSON.parse(task.correct_answer); } catch(e) {}
+          try { studentAnswers = JSON.parse(answer); } catch(e) {}
+          
+          if (Array.isArray(correctAnswers)) {
+            if (!Array.isArray(studentAnswers) || studentAnswers.length !== correctAnswers.length) {
+              connection.release();
+              return res.status(400).json({
+                success: false,
+                message: 'Invalid answer format. Expected an array of answers.'
+              });
+            }
             let correctCount = 0;
             for (let i = 0; i < correctAnswers.length; i++) {
               if (studentAnswers[i] === correctAnswers[i]) {
@@ -52,8 +62,8 @@ const submitTask = async (req, res) => {
             marks = Math.round((correctCount / correctAnswers.length) * 100);
             feedback = `You got ${correctCount} out of ${correctAnswers.length} correct. (Auto-graded)`;
           } else {
-            // Fallback for old single MCQ format
-            if (answer === task.correct_answer) {
+            // Single MCQ format fallback
+            if (String(answer).trim() === String(task.correct_answer).trim()) {
               marks = 100;
               feedback = 'Correct answer! (Auto-graded)';
             } else {
@@ -62,14 +72,9 @@ const submitTask = async (req, res) => {
             }
           }
         } catch (e) {
-          // Fallback if JSON parse fails
-          if (answer === task.correct_answer) {
-            marks = 100;
-            feedback = 'Correct answer! (Auto-graded)';
-          } else {
-            marks = 0;
-            feedback = `Incorrect answer. The correct answer was: ${task.correct_answer} (Auto-graded)`;
-          }
+          console.error("MCQ grading error:", e);
+          marks = 0;
+          feedback = 'Error grading answer format.';
         }
       }
 

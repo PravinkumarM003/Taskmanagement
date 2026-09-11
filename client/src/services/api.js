@@ -74,4 +74,15 @@ export const feedbackAPI = {
   getAllFeedbacks: () => apiClient.get('/feedbacks/admin/all')
 };
 
+// Test APIs
+export const testAPI = {
+  createTest: (data) => apiClient.post('/tests', data),
+  getAllTests: () => apiClient.get('/tests'),
+  getTestById: (id) => apiClient.get(`/tests/${id}`),
+  submitTest: (data) => apiClient.post('/tests/submit', data),
+  getAllSubmissions: () => apiClient.get('/tests/admin/submissions'),
+  getStudentSubmissions: () => apiClient.get('/tests/student/submissions'),
+  gradeSubmission: (id, data) => apiClient.put(`/tests/submissions/${id}`, data)
+};
+
 export default apiClient;

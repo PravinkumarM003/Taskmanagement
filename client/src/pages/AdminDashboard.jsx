@@ -162,7 +162,11 @@ export default function AdminDashboard() {
           <p>Create tasks and grade submissions</p>
         </div>
 
-        {error && <div className="error-alert">{error}</div>}
+        {error && (
+          <div className="error-alert">
+            {error} <button onClick={fetchData} style={{ marginLeft: '10px', padding: '4px 8px', borderRadius: '4px', border: '1px solid currentColor', background: 'transparent', color: 'inherit', cursor: 'pointer' }}>Retry</button>
+          </div>
+        )}
 
         <div className="tabs">
           <button

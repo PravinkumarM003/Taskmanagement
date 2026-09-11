@@ -141,7 +141,7 @@ export default function StudentDashboard() {
 
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
-    if (!feedbackYear || !feedbackPhone || !feedbackText) {
+    if (!feedbackRollNo || !feedbackPhone || !feedbackText) {
       alert('Please fill all feedback fields');
       return;
     }
@@ -185,7 +185,11 @@ export default function StudentDashboard() {
           <p>Manage and submit your tasks</p>
         </div>
 
-        {error && <div className="error-alert">{error}</div>}
+        {error && (
+          <div className="error-alert">
+            {error} <button onClick={fetchData} style={{ marginLeft: '10px', padding: '4px 8px', borderRadius: '4px', border: '1px solid currentColor', background: 'transparent', color: 'inherit', cursor: 'pointer' }}>Retry</button>
+          </div>
+        )}
 
         <div className="tabs">
           <button
@@ -310,7 +314,7 @@ export default function StudentDashboard() {
                   </svg>
                   LinkedIn
                 </a>
-                <a href="https://www.instagram.com/smart.____07/" target="_blank" rel="noreferrer" style={{
+                <a href="https://www.instagram.com/smart._.03/" target="_blank" rel="noreferrer" style={{
                   padding: '12px 24px',
                   borderRadius: '10px',
                   background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
