@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const testController = require('../controllers/testController');
-const { protect, adminOnly } = require('../middleware/authMiddleware');
+const { authMiddleware, adminMiddleware } = require('../middleware/authMiddleware');
 
 // Public/Student routes
-router.get('/', protect, testController.getAllTests);
-router.get('/:id', protect, testController.getTest);
-router.post('/submit', protect, testController.submitTest);
-router.get('/student/submissions', protect, testController.getStudentSubmissions);
+router.get('/', authMiddleware, testController.getAllTests);
+router.get('/:id', authMiddleware, testController.getTest);
+router.post('/submit', authMiddleware, testController.submitTest);
+router.get('/student/submissions', authMiddleware, testController.getStudentSubmissions);
 
 // Admin routes
-router.post('/', protect, adminOnly, testController.createTest);
-router.get('/admin/submissions', protect, adminOnly, testController.getTestSubmissions);
-router.put('/submissions/:id', protect, adminOnly, testController.gradeSubmission);
+router.post('/', authMiddleware, adminMiddleware, testController.createTest);
+router.get('/admin/submissions', authMiddleware, adminMiddleware, testController.getTestSubmissions);
+router.put('/submissions/:id', authMiddleware, adminMiddleware, testController.gradeSubmission);
 
 module.exports = router;
