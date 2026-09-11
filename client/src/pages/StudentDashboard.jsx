@@ -146,6 +146,11 @@ export default function StudentDashboard() {
       return;
     }
 
+    if (!/^\d{10}$/.test(feedbackPhone)) {
+      alert('Phone number must be exactly 10 digits.');
+      return;
+    }
+
     setIsSubmittingFeedback(true);
     try {
       await feedbackAPI.submitFeedback({
@@ -338,7 +343,11 @@ export default function StudentDashboard() {
 
         {activeTab === 'feedback' && (
           <div className="feedback-section" style={{ maxWidth: '600px', margin: '0 auto', background: 'white', padding: '30px', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
-            <h3 style={{ marginBottom: '20px', color: '#1e293b' }}>Share Your Feedback</h3>
+            <h3 style={{ marginBottom: '5px', color: '#1e293b' }}>Share Your Feedback</h3>
+            <p style={{ fontSize: '13px', color: '#16a34a', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Your feedback is 100% confidential and secure.
+            </p>
             <form onSubmit={handleFeedbackSubmit}>
               <div className="form-group" style={{ marginBottom: '15px' }}>
                 <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Roll Number</label>
@@ -356,8 +365,10 @@ export default function StudentDashboard() {
                 <input
                   type="tel"
                   value={feedbackPhone}
-                  onChange={(e) => setFeedbackPhone(e.target.value)}
-                  placeholder="e.g., +91 9876543210"
+                  onChange={(e) => setFeedbackPhone(e.target.value.replace(/\D/g, ''))}
+                  placeholder="e.g., 9876543210"
+                  maxLength="10"
+                  pattern="\d{10}"
                   required
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
                 />
