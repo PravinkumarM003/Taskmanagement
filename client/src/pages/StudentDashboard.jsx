@@ -355,7 +355,7 @@ export default function StudentDashboard() {
                   type="text"
                   value={feedbackRollNo}
                   onChange={(e) => setFeedbackRollNo(e.target.value)}
-                  placeholder="Enter your roll number"
+                  placeholder="ex:7376252XXXX"
                   required
                   style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #cbd5e1' }}
                 />
